@@ -12,9 +12,9 @@ def create_graph_2(): G2.add_node() G2.add_node(1,2,3, 5, 6, 10, 20) G2.add_node
 
 def build_lastgraph(): 
   with open ('lastfm_asia_edges.csv', 'r') as f: 
-  for linia in f: 
-    G.add_node(linia[0], linia[1]) 
-    G.add_edges([(linia[0], linia[1])])
+    for linia in f: 
+      G.add_node(linia[0], linia[1]) 
+      G.add_edges([(linia[0], linia[1])])
 
 def bfs(G):
   v = next(iter(G.nodes())) # Agafem un node qualsevol per començar 
