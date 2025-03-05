@@ -8,7 +8,8 @@ def create_graph_1(): G.add_node(1,2,3,4,5) G.add_nodes_from([(1,{'nom': 'charle
 
 def create_graph_2(): G2.add_node() G2.add_node(1,2,3, 5, 6, 10, 20) G2.add_nodes_from([(1,{'aparell':'servidor'})], [(2, {'aparell':'ordinador'})], [(3, {'aparell':'memòria'})], [(5, {'aparell':'altaveus'})], [(6, {'aparell':'altaveus'})], [(10, {'aparell':'mòbil'})], [(20, {'aparell':'impressora'})])
 
-""" G = nx.Graph()
+""" 
+G = nx.Graph()
 
 def build_lastgraph(): 
   with open ('lastfm_asia_edges.csv', 'r') as f: 
