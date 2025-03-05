@@ -17,9 +17,13 @@ def build_lastgraph():
     G.add_edges([(linia[0], linia[1])])
 
 def bfs(G):
-  v = next(iter(G.nodes())) # Agafem un node qualsevol per començar Q = [v] # Cua per gestionar els nodes pendents R = [v] # Llista de nodes visitats
+  v = next(iter(G.nodes())) # Agafem un node qualsevol per començar 
+  Q = [v] # Cua per gestionar els nodes pendents 
+  R = [v] # Llista de nodes visitats
+  
   state = {node: 0 for node in G.nodes()}  # Estat dels nodes (0 = no visitat, 1 = visitat)
   state[v] = 1 # Marquem el primer node com a visitat
+  
   llista_llistes = []
   while Q: # Mentre hi hagi nodes pendents...
       w = Q.pop(0) # Traiem el primer de la cua
