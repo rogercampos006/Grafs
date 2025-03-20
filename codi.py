@@ -80,29 +80,25 @@ print(desglossament_nivells)
 import networkx as nx
 
 def component_DFS(G):
-    # Triem un node qualsevol per començar l'exploració
-    v_inicial = next(iter(G.nodes))
-
-    # Inicialitzem la pila i el conjunt de nodes visitats
-    P = [v_inicial]  # Pila (LIFO)
+    node_inicial = next(iter(G.nodes))
     visitats = set()  # Conjunt per evitar repetir nodes
-    llista_llistes = []  # Llista de nodes de la component
+    llista = []  # Llista per als nodes del component connex
+    # Iniciem el DFS des del node inicial
+    P = [node_inicial]  # Pila (LIFO)
 
     while P:
-        llista = []
         w = P.pop()  # Extreu l'últim node (DFS)
         if w not in visitats:
             visitats.add(w)
             llista.append(w)  # Afegim el node al resultat
-            
+
             # Afegim els veïns que encara no hem visitat
             for u in G.neighbors(w):
-                if u not in visitats :
+                if u not in visitats:
                     P.append(u)
-                    if u not in llista_llistes:
-                        llista.append(u)
-            llista_llistes.append(llista)
-    return llista_llistes  # Retorna els nodes de la mateixa component connex
+
+    return llista  # Retorna la llista de nodes del component connex
+
 
 
 
