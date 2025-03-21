@@ -45,7 +45,6 @@ def generar_graf():
     return G
 
 
-import networkx as nx
 
 def bfs(G):  
     v = next(iter(G.nodes()))  # Agafem un node qualsevol per començar
@@ -77,8 +76,6 @@ G = generar_graf()
 desglossament_nivells = bfs(G)
 print(desglossament_nivells)
 
-import networkx as nx
-
 
 def dfs(G):  
     v = next(iter(G.nodes()))  # Agafem un node qualsevol per començar
@@ -102,26 +99,32 @@ def dfs(G):
     
     return llista_llistes
 
-def experimenr_resilinet(G, num_intents = 100):
-    ll_nodes_eliminats = []
 
+def experiment_resilient(G, num_intents=100):
+    ll_nodes_eliminats = []  # Llista per emmagatzemar el nombre de nodes eliminats per prova
+        
     for intent in range(num_intents):
         G_copia = G.copy()
         nodes = list(G_copia.nodes())
         nodes_eliminats = 0
-
-        while nodes and nx.number_connected_components(G_copia) > 1:
-            node_eliminar = random.choice(nodes)
-            G_copia.remove_edge(*node_eliminar)
-            ll_nodes_eliminats.append(node_eliminar)
             
-
-    avg_nodes_eliminats = sum(ll_nodes_eliminats) / len(ll_nodes_eliminats) if ll_nodes_eliminats else 0
+            # Eliminar nodes mentre hi hagi nodes i només 1 component
+        while nodes and nx.number_connected_components(G_copia) == 1:
+                node_eliminar = random.choice(nodes)
+                G_copia.remove_node(node_eliminar)  # Eliminar node, no aresta
+                nodes.remove(node_eliminar)  # Actualitzar la llista de nodes
+                nodes_eliminats += 1
+            
+            # Si hem aconseguit 2 components, guardem el nombre de nodes eliminats
+        if nx.number_connected_components(G_copia) > 1:
+                ll_nodes_eliminats.append(nodes_eliminats)
+        
+        # Calcular la mitjana
+        avg_nodes_eliminats = sum(ll_nodes_eliminats) / len(ll_nodes_eliminats) if ll_nodes_eliminats else 0
+        
     print(f"Nombre de proves: {num_intents}")
     print(f"Mitjana de nodes eliminats: {avg_nodes_eliminats:.2f}")
-    
+        
     return avg_nodes_eliminats
-
-llista = dfs(G)
-print(llista)
       
+print(experiment_resilient(G, 100))
