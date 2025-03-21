@@ -1,50 +1,16 @@
 import networkx as nx
 import random
 
-
-"""
-
-G = nx.Graph()
-G2 = nx.DiGraph()
-
-
-def create_graph_1():
-    G.add_node(1,2,3,4,5)
-    G.add_nodes_from([(1,{'nom': 'charles'})], [(2,{'nom': 'jake'})], (3,{'nom': 'amy'}), (4,{'nom': 'raymond'}), (5,{'nom': 'gina'}))
-    G.add_edges_from([(1, 2), (1, 5), (5,3), (3,2), (2,4)])
-
-def create_graph_2():
-    G2.add_node()
-    G2.add_node(1,2,3, 5, 6, 10, 20)
-    G2.add_nodes_from([(1,{'aparell':'servidor'})], [(2, {'aparell':'ordinador'})], [(3, {'aparell':'memòria'})], [(5, {'aparell':'altaveus'})], [(6, {'aparell':'altaveus'})], [(10, {'aparell':'mòbil'})], [(20, {'aparell':'impressora'})])
-
-"""
 G = nx.Graph()
 
 def build_lastgraph():
-    with open ('lastfm_asia_edges.csv', 'r') as f:
-        for linia in f:
-            G.add_node(linia[0], linia[1])
-            G.add_edges([(linia[0], linia[1])])
-
-#Graf generat per realitzar proves
-def generar_graf():
     G = nx.Graph()
-    center = 0  # Node central
-    corona1 = list(range(1, 11))  # Primera corona
-    corona2 = list(range(11, 30))  # Segona corona
-    
-    # Connectem el centre amb la primera corona
-    for node in corona1:
-        G.add_edge(center, node)
-    
-    # Connectem la primera corona amb la segona
-    for i, node in enumerate(corona2):
-        G.add_edge(corona1[i % len(corona1)], node)
-    
+    with open('lastfm_asia_edges.csv', 'r') as f:
+        next(f)
+        for linia in f:
+            node1, node2 = linia.strip().split(',')
+            G.add_edge(node1, node2)
     return G
-
-
 
 def bfs(G):  
     v = next(iter(G.nodes()))  # Agafem un node qualsevol per començar
@@ -70,7 +36,7 @@ def bfs(G):
 
 
 # Generem el graf 
-G = generar_graf()
+G = build_lastgraph()
 
 # Executem BFS sobre el graf
 desglossament_nivells = bfs(G)
@@ -119,12 +85,10 @@ def experiment_resilient(G, num_intents=100):
         if nx.number_connected_components(G_copia) > 1:
                 ll_nodes_eliminats.append(nodes_eliminats)
         
-        # Calcular la mitjana
-        avg_nodes_eliminats = sum(ll_nodes_eliminats) / len(ll_nodes_eliminats) if ll_nodes_eliminats else 0
-        
+    # Calcular la mitjana
+    avg_nodes_eliminats = sum(ll_nodes_eliminats) / len(ll_nodes_eliminats) if ll_nodes_eliminats else 0
+            
     print(f"Nombre de proves: {num_intents}")
     print(f"Mitjana de nodes eliminats: {avg_nodes_eliminats:.2f}")
-        
-    return avg_nodes_eliminats
       
 print(experiment_resilient(G, 100))
