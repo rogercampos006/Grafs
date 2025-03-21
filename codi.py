@@ -102,6 +102,26 @@ def dfs(G):
     
     return llista_llistes
 
+def experimenr_resilinet(G, num_intents = 100):
+    ll_nodes_eliminats = []
+
+    for intent in range(num_intents):
+        G_copia = G.copy()
+        nodes = list(G_copia.nodes())
+        nodes_eliminats = 0
+
+        while nodes and nx.number_connected_components(G_copia) > 1:
+            node_eliminar = random.choice(nodes)
+            G_copia.remove_edge(*node_eliminar)
+            ll_nodes_eliminats.append(node_eliminar)
+            
+
+    avg_nodes_eliminats = sum(ll_nodes_eliminats) / len(ll_nodes_eliminats) if ll_nodes_eliminats else 0
+    print(f"Nombre de proves: {num_intents}")
+    print(f"Mitjana de nodes eliminats: {avg_nodes_eliminats:.2f}")
+    
+    return avg_nodes_eliminats
+
 llista = dfs(G)
 print(llista)
       
