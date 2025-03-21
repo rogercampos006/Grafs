@@ -79,28 +79,29 @@ print(desglossament_nivells)
 
 import networkx as nx
 
-def component_DFS(G):
-    node_inicial = next(iter(G.nodes))
-    visitats = set()  # Conjunt per evitar repetir nodes
-    llista = []  # Llista per als nodes del component connex
-    # Iniciem el DFS des del node inicial
-    P = [node_inicial]  # Pila (LIFO)
 
-    while P:
-        w = P.pop()  # Extreu l'últim node (DFS)
-        if w not in visitats:
-            visitats.add(w)
-            llista.append(w)  # Afegim el node al resultat
+def dfs(G):  
+    v = next(iter(G.nodes()))  # Agafem un node qualsevol per començar
+    Q = [v]  # Cua per gestionar els nodes pendents
+    state = {node: 0 for node in G.nodes()}  # 0 = no visitat, 1 = visitat
+    state[v] = 1  # Marquem el primer node com a visitat
+    
+    llista_llistes = [[v]]  # Primera capa amb el node inicial
+    
+    while Q:  
+        nivell = []  # Llista per al següent nivell
+        for _ in range(len(Q)):  # Iterem sobre tots els elements actuals de la cua
+            w = Q.pop()  # Traiem el primer de la cua
+            for u in G.neighbors(w):  # Per cada veí del node actual
+                if state[u] == 0:  # Si encara no l'hem visitat
+                    Q.append(u)  # Afegim el veí a la cua
+                    state[u] = 1  # El marquem com a visitat
+                    nivell.append(u)  # L'afegim a la llista del nivell actual
+        if nivell:  # Només afegim nivells no buits
+            llista_llistes.append(nivell)
+    
+    return llista_llistes
 
-            # Afegim els veïns que encara no hem visitat
-            for u in G.neighbors(w):
-                if u not in visitats:
-                    P.append(u)
-
-    return llista  # Retorna la llista de nodes del component connex
-
-
-
-
-llista = component_DFS(G)
+llista = dfs(G)
 print(llista)
+      
