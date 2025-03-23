@@ -1,7 +1,5 @@
 import networkx as nx
 import random
-import time
-
 
 G = nx.Graph()
 
@@ -92,10 +90,29 @@ def experiment_resilient(G, num_intents=100):
             
     print(f"Nombre de proves: {num_intents}")
     print(f"Mitjana de nodes eliminats: {avg_nodes_eliminats:.2f}")
-      
+     
 print(experiment_resilient(G, 100))
 
+"""
+
 G = nx.Graph()
+G2 = nx.DiGraph()
+
+
+def create_graph_1():
+    G.add_node(1,2,3,4,5)
+    G.add_nodes_from([(1,{'nom': 'charles'})], [(2,{'nom': 'jake'})], (3,{'nom': 'amy'}), (4,{'nom': 'raymond'}), (5,{'nom': 'gina'}))
+    G.add_edges_from([(1, 2), (1, 5), (5,3), (3,2), (2,4)])
+
+def create_graph_2():
+    G2.add_node()
+    G2.add_node(1,2,3, 5, 6, 10, 20)
+    G2.add_nodes_from([(1,{'aparell':'servidor'})], [(2, {'aparell':'ordinador'})], [(3, {'aparell':'memòria'})], [(5, {'aparell':'altaveus'})], [(6, {'aparell':'altaveus'})], [(10, {'aparell':'mòbil'})], [(20, {'aparell':'impressora'})])
+
+"""
+G = nx.Graph()
+
+import time
 
 # Generem el graf 
 G = build_lastgraph()
@@ -111,3 +128,26 @@ temps_inici = time.time()
 dfs(G)
 temps_final = time.time()
 print(f"Temps de funcio dfs: {temps_final - temps_inici} segons")
+
+#Experiment
+
+
+
+def dividir_graf_eliminant_node(G):
+    
+    punts_articulacio = list(nx.articulation_points(G))# Trobar tots els punts d'articulació del graf
+
+    if punts_articulacio:
+        node_a_eliminar = punts_articulacio[0]# Si hi ha punts d'articulació, eliminar el primer trobat
+
+        G.remove_node(node_a_eliminar)
+        print(f"S'ha eliminat el node {node_a_eliminar} (punt d'articulació) per dividir el graf.")
+    # Comprovar si el graf ara té dues components
+    if nx.number_connected_components(G)>1:
+        print("El graf s'ha dividit en dues o més components connexes.")
+    else:
+        print("El graf encara té una sola component connexa.")
+
+    return G
+
+G = dividir_graf_eliminant_node(G)
