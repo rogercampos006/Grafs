@@ -92,3 +92,22 @@ def experiment_resilient(G, num_intents=100):
     print(f"Mitjana de nodes eliminats: {avg_nodes_eliminats:.2f}")
       
 print(experiment_resilient(G, 100))
+
+G = nx.Graph()
+
+import time
+
+# Generem el graf 
+G = build_lastgraph()
+
+temps_inici = time.time()
+bfs(G)
+temps_final = time.time()
+print(f"Temps de funcio bfs: {temps_final - temps_inici} segons")
+# Generem el graf 
+G = build_lastgraph()
+
+temps_inici = time.time()
+dfs(G)
+temps_final = time.time()
+print(f"Temps de funcio dfs: {temps_final - temps_inici} segons")
