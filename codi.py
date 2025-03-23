@@ -1,5 +1,7 @@
 import networkx as nx
 import random
+import time
+
 
 G = nx.Graph()
 
@@ -94,8 +96,6 @@ def experiment_resilient(G, num_intents=100):
 print(experiment_resilient(G, 100))
 
 G = nx.Graph()
-
-import time
 
 # Generem el graf 
 G = build_lastgraph()
