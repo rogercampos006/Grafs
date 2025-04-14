@@ -1,5 +1,6 @@
 import networkx as nx
 import random
+from collections import Counter
 
 G = nx.Graph()
 
@@ -24,4 +25,10 @@ def simulate_coincidence(m,s):
 
 def  how_many_cliques(n,m,s):
     G = simulate_coincidence(m, s)
-    arestes = list(G.edges())
+    H = nx.Graph()
+    for u, v in G.nodes():
+        if G [u][v] ['pes'] > n:
+            H.add_edge ([u], [v])
+    cliques = list(nx.find_cliques(H))
+    comptador = Counter(len(c) for c in cliques)
+    return comptador
