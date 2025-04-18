@@ -31,3 +31,40 @@ def  how_many_cliques(n,m,s):
     cliques = list(nx.find_cliques(H))
     comptador = Counter(len(c) for c in cliques)
     return comptador
+
+#Tasca 2. La loto n<m
+
+def obtenir_intents(n,m):
+    combinacio_guanyadora = []
+    while len(combinacio_guanyadora) < n:
+        try:
+            num = int(input(f"Introdueix el número {len(combinacio_guanyadora)+1}: "))
+            if num < 1 or num > m:
+                print(f"El número ha d'estar entre 1 i {m}.")
+            elif num in combinacio_guanyadora:
+                print("No pot haver-hi números duplicats.")
+            else:
+                combinacio_guanyadora.append(num)
+        except ValueError:
+            print("Introdueix un número vàlid.")
+    combinacio = []
+    intents = 0
+    while (set(combinacio) != set(combinacio_guanyadora)):
+        combinacio = []
+        combinacio = random.sample(range(1, m+1), n)
+        intents +=1
+    return intents
+
+def loto ():
+    try:
+        n = -1
+        m = 3
+        while (not 0<n<=m):
+            n = int(input("Introdueix la quantitat de números a triar: "))
+            m = int(input("Introdueix el rang màxim de números: "))
+        intents = obtenir_intents (n, m)
+        print("S'han necessitat", intents, "intents per guanyar la loteria")
+    except ValueError:
+        print("Error: Introdueix valors numèrics vàlids.")
+    
+loto ()
