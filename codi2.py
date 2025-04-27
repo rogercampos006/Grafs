@@ -102,11 +102,6 @@ def build_lastgraph():
 # Construïm el graf
 G = build_lastgraph()
 
-# Comprovem si el graf té arestes
-if G.number_of_edges() == 0:
-    print("Error: El graf està buit. Comprova el fitxer 'lastfm_asia_edges.csv'.")
-    exit()
-
 # Configuració de l'experiment
 strategies = ['largest_first', 'random_sequential', 'smallest_last', 
               'independent_set', 'connected_sequential_bfs', 
