@@ -73,7 +73,6 @@ loto ()
 
 import networkx as nx
 import time
-from statistics import mean
 
 G = build_lastgraph()
 strategies = ['largest_first', 'random_sequential', 'smallest_last', 
@@ -93,4 +92,7 @@ for size in sizes:
             coloring = nx.coloring.greedy_color(subgraph, strategy=strategy)
             times.append(time.time() - start)
             colors.append(max(coloring.values()) + 1)
-        results[size][strategy] = {'avg_time': mean(times), 'avg_colors': mean(colors)}
+        results[size][strategy] = {
+            'avg_time': sum(times) / len(times),
+            'avg_colors': sum(colors) / len(colors)
+        }
