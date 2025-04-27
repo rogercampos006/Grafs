@@ -68,3 +68,29 @@ def loto ():
         print("Error: Introdueix valors numèrics vàlids.")
     
 loto ()
+
+#Tasca 3. Experiment
+
+import networkx as nx
+import time
+from statistics import mean
+
+G = build_lastgraph()
+strategies = ['largest_first', 'random_sequential', 'smallest_last', 
+              'independent_set', 'connected_sequential_bfs', 
+              'connected_sequential_dfs', 'saturation_largest_first']
+sizes = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+results = {}
+
+for size in sizes:
+    results[size] = {}
+    subgraph = nx.Graph(list(G.edges())[:size])
+    for strategy in strategies:
+        times = []
+        colors = []
+        for _ in range(5):
+            start = time.time()
+            coloring = nx.coloring.greedy_color(subgraph, strategy=strategy)
+            times.append(time.time() - start)
+            colors.append(max(coloring.values()) + 1)
+        results[size][strategy] = {'avg_time': mean(times), 'avg_colors': mean(colors)}
