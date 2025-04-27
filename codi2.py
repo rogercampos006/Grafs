@@ -6,36 +6,40 @@ G = nx.Graph()
 
 def build_lastgraph():
     G = nx.Graph()
+    # Obrim el fitxer d'arestes i llegim les dades
     with open('lastfm_asia_edges.csv', 'r') as f:
-        next(f)
+        next(f)  # Saltem la capçalera
         for linia in f:
             node1, node2 = linia.strip().split(',')
-            G.add_edge(node1, node2)
+            G.add_edge(node1, node2)  # Afegim aresta al graf
     return G
 
 def simulate_coincidence(m,s):
     G = build_lastgraph()
+    # Assignem pesos aleatoris a les arestes
     for x, y in G.edges():
-        pes = random.gauss(m, s)
-        pes = max(0, min(pes, 1))
-        G [x][y]['pes'] = round(pes, 3)
+        pes = random.gauss(m, s)  # Generació de pes amb distribució normal
+        pes = max(0, min(pes, 1))  # Trunquem valors entre 0 i 1
+        G [x][y]['pes'] = round(pes, 3)  # Arrodonim a 3 decimals
     
     return G
 
 def  how_many_cliques(n,m,s):
     G = simulate_coincidence(m, s)
     H = nx.Graph()
+    # Creem subgraf amb arestes de pes superior a n
     for u, v, data in G.edges(data = True):
         if G [u][v] ['pes'] > n:
             H.add_edge (u, v)
+    # Comptem mida de cliques trobades
     cliques = list(nx.find_cliques(H))
     comptador = Counter(len(c) for c in cliques)
     return comptador
 
-#Tasca 2. La loto n<m
-
+# Tasca 2. Simulador de loteria
 def obtenir_intents(n,m):
     combinacio_guanyadora = []
+    # Demanem números a l'usuari amb validació
     while len(combinacio_guanyadora) < n:
         try:
             num = int(input(f"Introdueix el número {len(combinacio_guanyadora)+1}: "))
@@ -47,11 +51,12 @@ def obtenir_intents(n,m):
                 combinacio_guanyadora.append(num)
         except ValueError:
             print("Introdueix un número vàlid.")
+    
+    # Simulem intents fins a encertar
     combinacio = []
     intents = 0
     while (set(combinacio) != set(combinacio_guanyadora)):
-        combinacio = []
-        combinacio = random.sample(range(1, m+1), n)
+        combinacio = random.sample(range(1, m+1), n)  # Generació combinació aleatòria
         intents +=1
     return intents
 
@@ -59,6 +64,7 @@ def loto ():
     try:
         n = -1
         m = 3
+        # Validació entrada d'usauri
         while (not 0<n<=m):
             n = int(input("Introdueix la quantitat de números a triar: "))
             m = int(input("Introdueix el rang màxim de números: "))
@@ -69,38 +75,8 @@ def loto ():
     
 loto ()
 
-#Tasca 3. Experiment
-
-import networkx as nx
+# Tasca 3. Experiment de coloració de grafs
 import time
-
-# Funció per construir el graf
-def build_lastgraph():
-    G = nx.Graph()
-    try:
-        with open('lastfm_asia_edges.csv', 'r') as f:
-            next(f)  # Saltem la capçalera
-            for linia in f:
-                linia = linia.strip()
-                if not linia:  # Ignorem línies buides
-                    continue
-                try:
-                    node1, node2 = linia.split(',')
-                    G.add_edge(node1, node2)
-                except ValueError as e:
-                    print(f"Error processant línia: {linia}. Error: {e}")
-                    continue
-        print(f"Graf construït: {G.number_of_nodes()} nodes, {G.number_of_edges()} arestes")
-        return G
-    except FileNotFoundError:
-        print("Error: No s'ha trobat el fitxer 'lastfm_asia_edges.csv'")
-        return nx.Graph()
-    except Exception as e:
-        print(f"Error inesperat en construir el graf: {e}")
-        return nx.Graph()
-
-# Construïm el graf
-G = build_lastgraph()
 
 # Configuració de l'experiment
 strategies = ['largest_first', 'random_sequential', 'smallest_last', 
@@ -109,22 +85,27 @@ strategies = ['largest_first', 'random_sequential', 'smallest_last',
 sizes = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
 results = {}
 
-# Executem l'experiment
+# Executem l'experiment per diferents mides
 for size in sizes:
     print(f"\nProcessant subgraf de mida: {size}")
     results[size] = {}
     try:
+        # Creem subgraf amb les primeres 'size' arestes
         subgraph = nx.Graph(list(G.edges())[:size])
         print(f"Subgraf creat: {subgraph.number_of_nodes()} nodes, {subgraph.number_of_edges()} arestes")
+        
+        # Proves amb diferents estratègies de coloració
         for strategy in strategies:
             print(f"  Executant estratègia: {strategy}")
             times = []
             colors = []
+            # Fem 5 execucions per estratègia
             for i in range(5):
                 start = time.time()
                 coloring = nx.coloring.greedy_color(subgraph, strategy=strategy)
-                times.append(time.time() - start)
-                colors.append(max(coloring.values()) + 1)
+                times.append(time.time() - start)  # Mesurem temps execució
+                colors.append(max(coloring.values()) + 1)  # Comptem colors utilitzats
+            # Emmagatzemem resultats
             results[size][strategy] = {
                 'avg_time': sum(times) / len(times),
                 'avg_colors': sum(colors) / len(colors)
@@ -134,7 +115,7 @@ for size in sizes:
         print(f"Error processant mida {size}: {e}")
         continue
 
-# Mostrem els resultats finals
+# Resultats finals de l'experiment
 print("\nResultats finals:")
 for size in results:
     print(f"\nMida: {size}")
